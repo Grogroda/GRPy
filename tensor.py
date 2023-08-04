@@ -55,26 +55,38 @@ class Tensor:
         #Use something other than deepcopy for the initial tensor creation
         self.lista=np.array(self.lista)
 
-        def __eq__(T1, T2):
-            if T1.struct==T2.struct:
-                #Not working in any way whatsoever
-                return True
-            else:
-                return False
+    def __eq__(T1, T2):
+        if T1.struct==T2.struct and np.array_equal(T1.lista,T2.lista) and T1.coords==T2.coords: #How to verify if the metric is equal?
+            return True
+        else:
+            return False
 
-        def __add__(self, T):
-            #check if the structure is compatible, then add with numpy
-            
+    def __add__(self, T):
+        npself=np.array(self.lista)
+        npT=np.array(T.lista)
+
+        if self.struct==T.struct and self.struct==T.struct and self.coords==T.coords:
+            arr_sum=npT+npself
+            list_sum=arr_sum.tolist()
+            return Tensor(self.struct, [], lista=list_sum, metric=self.metric, coords=self.coords) 
+
+        else:
+            raise Exception("Tensors are somehow incompatible!")
             return None
 
-        def __prod__(self, k):
-            #if k is a number, product with scalar; if k is another tensor -> too much work for now
-            if type(k)==float or type(k)==int:
-                #prod por escalar
-                return None
-            else:
-                #contração
-                return None
+    def __mul__(self, k):
+        #if k is a number, product with scalar; if k is another tensor -> too much work for now
+        if type(k)==float or type(k)==int:
+            arr_prod=k*self.lista
+            list_prod=arr_prod.tolist()
+            return Tensor(self.struct, [], lista=list_prod, metric=self.metric, coords=self.coords) 
+        else:
+            print("Tensor contraction not yet implemented")
+            #contraction
+            return None
+
+    def __rmul__(self,k):
+        return self.__mul__(k)
 
 g_mink=Tensor([0,0], [], [[-1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], metric=[])
 
