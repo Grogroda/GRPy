@@ -65,7 +65,7 @@ class Tensor:
         npself=np.array(self.arr)
         npT=np.array(T.arr)
 
-        if self.struct==T.struct and self.struct==T.struct and self.coords==T.coords:
+        if self.struct==T.struct and self.coords==T.coords: #verify if metric is the same
             arr_sum=npT+npself
             list_sum=arr_sum.tolist()
             return Tensor(self.struct, [], arr=list_sum, metric=self.metric, coords=self.coords) 
